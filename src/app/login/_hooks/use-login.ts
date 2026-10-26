@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "@/lib/services/auth.service";
+import { useAuth } from "@/lib/context/auth-context";
 import { isAxiosError } from "axios";
 
 /**
@@ -11,6 +12,7 @@ import { isAxiosError } from "axios";
  */
 export function useLogin() {
     const router = useRouter();
+    const { refreshSession } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +24,7 @@ export function useLogin() {
         setIsLoading(true);
         try {
             await authService.login({ email, password });
+            await refreshSession();
             router.push("/dashboard");
         } catch (err) {
             if (isAxiosError(err)) {

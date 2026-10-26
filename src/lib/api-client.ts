@@ -10,8 +10,10 @@
 
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
-export const BASE_URL =
+const rawBaseUrl =
     process.env.NEXT_PUBLIC_API_URL || "https://vedha-backend-9wy7.onrender.com";
+// Strip trailing slashes and trailing /api to guarantee clean endpoints
+export const BASE_URL = rawBaseUrl.replace(/\/+$/, "").replace(/\/api$/, "");
 
 // ─── Token helpers ────────────────────────────────────────────────────────────
 
