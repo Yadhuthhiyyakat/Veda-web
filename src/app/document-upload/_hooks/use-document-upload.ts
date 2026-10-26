@@ -26,8 +26,15 @@ const FALLBACK_CATEGORIES: DocumentCategory[] = [
         subcategories: [
             { id: "aadhar", name: "Aadhar Card", required_fields: ["aadhar_number", "dob"] },
             { id: "pan_card", name: "PAN Card", required_fields: ["pan_number"] },
-            { id: "passport", name: "Passport", required_fields: ["passport_number", "expiry_date"] },
             { id: "driving_license", name: "Driving License", required_fields: ["dl_number", "valid_till"] },
+            { id: "passport", name: "Passport", required_fields: ["passport_number", "expiry_date"] },
+            { id: "voter_id", name: "Voter ID Card", required_fields: ["epic_number"] },
+            { id: "ration_card", name: "Ration Card", required_fields: ["ration_card_number"] },
+            { id: "birth_certificate", name: "Birth Certificate" },
+            { id: "marriage_certificate", name: "Marriage Certificate" },
+            { id: "income_certificate", name: "Income Certificate" },
+            { id: "caste_certificate", name: "Caste Certificate" },
+            { id: "domicile_certificate", name: "Domicile Certificate" },
         ],
     },
     {
@@ -45,13 +52,42 @@ const FALLBACK_CATEGORIES: DocumentCategory[] = [
                 name: "Marksheet / Transcript",
                 required_fields: ["roll_number", "institution", "year"],
             },
+            { id: "diploma", name: "Diploma Certificate" },
+            { id: "school_certificate", name: "School Leaving / Transfer Certificate" },
+            { id: "college_id", name: "College Student ID" },
+        ],
+    },
+    {
+        id: "medical_institution",
+        name: "Healthcare & Hospitals",
+        description: "Medical records, prescriptions, and health reports",
+        subcategories: [
+            { id: "prescription", name: "Medical Prescription" },
+            { id: "discharge_summary", name: "Hospital Discharge Summary" },
+            { id: "health_insurance", name: "Health Insurance Card / Policy" },
+            { id: "vaccination_certificate", name: "Vaccination Record" },
+            { id: "lab_report", name: "Diagnostic / Lab Report" },
+        ],
+    },
+    {
+        id: "financial_institution",
+        name: "Financial Institutions",
+        description: "Bank statements, pay stubs, and tax returns",
+        subcategories: [
+            { id: "bank_statement", name: "Bank Account Statement" },
+            { id: "salary_slip", name: "Salary Slip / Pay Stub" },
+            { id: "tax_return", name: "ITR / Tax Return Acknowledgement" },
         ],
     },
     {
         id: "other",
         name: "Other Documents",
         description: "General certificates, licenses, or custom documents",
-        subcategories: [{ id: "general", name: "General Document" }],
+        subcategories: [
+            { id: "utility_bill", name: "Utility Bill" },
+            { id: "rent_agreement", name: "Rent Agreement" },
+            { id: "general", name: "General Document" },
+        ],
     },
 ];
 
@@ -247,9 +283,24 @@ export function useDocumentUpload() {
                 setCreatedDoc(result);
             }
         } catch (err: unknown) {
-            console.error("Document creation failed", err);
+            if (isAxiosError(err) && err.response?.status && err.response.status < 500) {
+                console.warn(`[Upload Rejected: ${err.response.status}]`, err.response.data);
+            } else {
+                console.error("Document creation failed", err);
+            }
             if (isAxiosError(err)) {
-                setError(err.response?.data?.error || "Creation failed. Please verify the input values.");
+                const data = err.response?.data;
+                if (Array.isArray(data?.reasons) && data.reasons.length > 0) {
+                    setError(`${data.error || "Validation failed"}: ${data.reasons.join(" ")}`);
+                } else if (data?.error) {
+                    setError(data.error);
+                } else if (err.code === "ERR_NETWORK" || err.message === "Network Error") {
+                    setError("Connection failed (Network Error): The server closed the connection or timed out. Please verify your connection.");
+                } else {
+                    setError(err.message || "Upload failed. Please verify the input values.");
+                }
+            } else if (err instanceof Error) {
+                setError(err.message);
             } else {
                 setError("An unexpected error occurred while saving the document.");
             }

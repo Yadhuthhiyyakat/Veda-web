@@ -95,6 +95,18 @@ export function SettingsPanel() {
                             Export
                         </button>
                     </SettingRow>
+
+                    <SettingRow
+                        label="Veda Mobile Wallet Authorization"
+                        description="Authorize your Veda Mobile Wallet & Verifier App to access credentials from this Cloud Locker"
+                    >
+                        <a
+                            href="/dashboard"
+                            className="px-4 py-1.5 text-xs font-semibold bg-[#5a4fcf] text-white rounded-lg hover:bg-[#4a3fb8] transition-colors inline-block"
+                        >
+                            Authorize Wallet
+                        </a>
+                    </SettingRow>
                 </div>
             </div>
 

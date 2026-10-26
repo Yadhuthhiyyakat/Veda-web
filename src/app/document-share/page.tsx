@@ -14,7 +14,9 @@ export default function DocumentSharePage() {
                         <h1 className="text-2xl font-bold text-[#1a172c] mb-1">Shared Documents</h1>
                         <p className="text-sm text-gray-500 font-medium">Manage documents shared via secure links</p>
                     </div>
-                    <SharePanel />
+                    <React.Suspense fallback={<div className="animate-pulse h-64 bg-white rounded-2xl border border-gray-100" />}>
+                        <SharePanel />
+                    </React.Suspense>
                 </main>
             </div>
         </div>

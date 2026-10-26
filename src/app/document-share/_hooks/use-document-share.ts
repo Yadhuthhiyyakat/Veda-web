@@ -18,15 +18,17 @@ export function useDocumentShare() {
     const [isLoadingTokens, setIsLoadingTokens] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const generateShareToken = async (docId: string) => {
+    const generateShareToken = async (docId: string, sharedFields?: string[]) => {
         setError(null);
         setIsGenerating(true);
         try {
             const token = await tokenService.generateToken({
                 document_id: docId,
                 expires_in_minutes: expiresInMinutes,
+                shared_fields: sharedFields && sharedFields.length > 0 ? sharedFields : undefined,
             });
             setGeneratedToken(token);
+            await loadTokensForDocument(docId);
             return token;
         } catch (err) {
             if (isAxiosError(err)) {

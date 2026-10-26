@@ -1,4 +1,5 @@
-import apiClient, { tokenStorage } from "@/lib/api-client";
+import apiClient, { BASE_URL, tokenStorage } from "@/lib/api-client";
+import axios from "axios";
 import type {
     LoginResponse,
     SignupResponse,
@@ -10,9 +11,17 @@ import type {
     ResetPasswordPayload,
     ResetPasswordResponse,
     DeleteAccountResponse,
+    HealthCheckResponse,
+    DevicePairingTokenResponse,
 } from "@/lib/types/api.types";
 
 export const authService = {
+    /** GET /health — Uptime monitoring / Render backend warmup check */
+    healthCheck: async (): Promise<HealthCheckResponse> => {
+        const { data } = await axios.get<HealthCheckResponse>(`${BASE_URL}/health`);
+        return data;
+    },
+
     /** POST /api/auth/signup */
     signup: async (payload: {
         email: string;
@@ -100,6 +109,12 @@ export const authService = {
     deleteAccount: async (): Promise<DeleteAccountResponse> => {
         const { data } = await apiClient.delete<DeleteAccountResponse>("/auth/delete");
         tokenStorage.clearTokens();
+        return data;
+    },
+
+    /** POST /api/auth/pair-token — generates QR pairing payload for mobile app */
+    getPairingToken: async (): Promise<DevicePairingTokenResponse> => {
+        const { data } = await apiClient.post<DevicePairingTokenResponse>("/auth/pair-token");
         return data;
     },
 

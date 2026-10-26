@@ -1,20 +1,48 @@
+"use client";
+
 import React from "react";
-import { DocFileIcon, SendIcon, ClockIcon, PulseIcon } from "@/lib/icons";
+import { DocFileIcon, SendIcon, ClockIcon, BellIcon } from "@/lib/icons";
 
 interface StatCardProps {
     icon: React.ReactNode;
+    iconBg: string;
     count: string | number;
     label: string;
+    sublabel: string;
+    isLoading?: boolean;
 }
 
-export function StatCard({ icon, count, label }: StatCardProps) {
+export function StatCard({
+    icon,
+    iconBg,
+    count,
+    label,
+    sublabel,
+    isLoading = false,
+}: StatCardProps) {
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-full bg-[#f4f2ff] flex items-center justify-center">
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-5 flex items-center justify-between gap-4 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all group">
+            <div className="space-y-1">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide block">
+                    {label}
+                </span>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#131127] tracking-tight">
+                    {isLoading ? (
+                        <div className="w-12 h-7 bg-slate-100 rounded-md animate-pulse" />
+                    ) : (
+                        count
+                    )}
+                </div>
+                <span className="text-[11px] font-medium text-slate-400 block">
+                    {sublabel}
+                </span>
+            </div>
+
+            <div
+                className={`w-12 h-12 rounded-2xl ${iconBg} flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform`}
+            >
                 {icon}
             </div>
-            <span className="text-2xl font-bold text-[#1a172c]">{count}</span>
-            <span className="text-xs font-semibold text-gray-400">{label}</span>
         </div>
     );
 }
@@ -34,14 +62,40 @@ export function DashboardStatCards({
     recentActivity = 0,
     isLoading = false,
 }: DashboardStatCardsProps) {
-    const display = (n: number) => (isLoading ? "—" : String(n));
-
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <StatCard icon={<DocFileIcon className="text-[#5a4fcf] w-6 h-6" />} count={display(totalDocuments)} label="Total Documents" />
-            <StatCard icon={<SendIcon className="text-[#5a4fcf] w-6 h-6" />} count={display(sharedToday)} label="Shared Today" />
-            <StatCard icon={<ClockIcon className="text-[#5a4fcf] w-6 h-6" />} count={display(expiringSoon)} label="Expiring Soon" />
-            <StatCard icon={<PulseIcon className="text-[#5a4fcf] w-6 h-6" />} count={display(recentActivity)} label="Notifications" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+            <StatCard
+                icon={<DocFileIcon className="text-indigo-600 w-5 h-5" />}
+                iconBg="bg-indigo-50 text-indigo-600"
+                count={totalDocuments}
+                label="Total Vault Files"
+                sublabel="AES-256 encrypted"
+                isLoading={isLoading}
+            />
+            <StatCard
+                icon={<SendIcon className="text-emerald-600 w-5 h-5" />}
+                iconBg="bg-emerald-50 text-emerald-600"
+                count={sharedToday}
+                label="Shared Active"
+                sublabel="QR & secure links"
+                isLoading={isLoading}
+            />
+            <StatCard
+                icon={<ClockIcon className="text-amber-600 w-5 h-5" />}
+                iconBg="bg-amber-50 text-amber-600"
+                count={expiringSoon}
+                label="Expiring Soon"
+                sublabel="Next 30 days"
+                isLoading={isLoading}
+            />
+            <StatCard
+                icon={<BellIcon className="text-purple-600 w-5 h-5" />}
+                iconBg="bg-purple-50 text-purple-600"
+                count={recentActivity}
+                label="Alerts &amp; Activity"
+                sublabel="System notifications"
+                isLoading={isLoading}
+            />
         </div>
     );
 }

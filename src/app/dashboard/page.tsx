@@ -5,6 +5,7 @@ import DashHeader from "../components/dash-header";
 import { DashboardTopBar } from "./_components/dashboard-top-bar";
 import { DashboardStatCards } from "./_components/stat-cards";
 import { RecentDocumentsTable } from "./_components/recent-documents-table";
+import { LinkedDevicesCard } from "./_components/linked-devices-card";
 import { useDashboard } from "./_hooks/use-dashboard";
 import React from "react";
 
@@ -39,6 +40,8 @@ export default function Dashboard() {
                         recentActivity={stats.recentActivity}
                         isLoading={isLoading}
                     />
+
+                    <LinkedDevicesCard documents={documents} />
 
                     <RecentDocumentsTable documents={documents} isLoading={isLoading} />
                 </main>

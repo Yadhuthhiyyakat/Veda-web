@@ -58,7 +58,7 @@ export const documentService = {
      */
     uploadDocument: async (formData: FormData): Promise<Document> => {
         const { data } = await apiClient.post<Document>("/documents/upload", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
+            headers: { "Content-Type": undefined },
         });
         return data;
     },

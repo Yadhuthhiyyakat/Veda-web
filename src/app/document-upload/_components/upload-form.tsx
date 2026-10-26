@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { UploadIcon, ShieldIcon, DocFileIcon, CheckIcon, PlusIcon, TrashIcon } from "@/lib/icons";
 import { useDocumentUpload } from "../_hooks/use-document-upload";
@@ -13,6 +13,11 @@ function formatFieldLabel(key: string): string {
 
 export function DocumentUploadForm() {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const {
         mode,
         setMode,
@@ -56,6 +61,14 @@ export function DocumentUploadForm() {
         const file = e.dataTransfer.files?.[0];
         if (file) handleFileSelect(file);
     };
+
+    if (!isMounted) {
+        return (
+            <div className="py-12 text-center text-sm text-gray-400 animate-pulse">
+                Loading upload form…
+            </div>
+        );
+    }
 
     // If document was just created, show success confirmation view
     if (createdDoc) {
@@ -149,8 +162,8 @@ export function DocumentUploadForm() {
 
             {/* Error Notification */}
             {error && (
-                <div className="bg-rose-50 border border-rose-200 text-rose-700 text-xs px-4 py-3 rounded-xl flex items-center gap-2">
-                    <span className="font-semibold">Error:</span>
+                <div className="bg-rose-50 border border-rose-200 text-rose-700 text-xs px-4 py-3 rounded-xl flex items-start gap-2">
+                    <span className="font-semibold shrink-0">Upload Rejected:</span>
                     <span>{error}</span>
                 </div>
             )}
@@ -191,6 +204,10 @@ export function DocumentUploadForm() {
                             <p className="text-xs text-gray-400 mt-1">
                                 PDF, JPG, PNG, or DOCX — max 25 MB (Encrypted on upload)
                             </p>
+                            <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50/70 border border-indigo-100 rounded-full text-[11px] text-indigo-700 font-medium">
+                                <ShieldIcon className="w-3.5 h-3.5 text-indigo-500" />
+                                <span>Authenticity Guard: Uploaded file will be verified for genuine {activeSubcategoryObj?.name || "document"} markers</span>
+                            </div>
                         </div>
                     )}
                     <input
@@ -386,6 +403,7 @@ export function DocumentUploadForm() {
             {/* Submit Button */}
             <button
                 type="submit"
+                suppressHydrationWarning
                 disabled={isSubmitting || (mode === "file" && !selectedFile)}
                 className="w-full px-6 py-3.5 bg-[#5a4fcf] hover:bg-[#4a3fb8] text-white text-sm font-semibold rounded-xl transition-all shadow-md shadow-indigo-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
             >

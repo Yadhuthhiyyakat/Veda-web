@@ -20,6 +20,7 @@ import {
 import { useSingleDocument } from "./_hooks/use-single-document";
 import { EditDocumentModal } from "./_components/edit-document-modal";
 import { DeleteDocumentModal } from "./_components/delete-document-modal";
+import { SubmitVerificationModal } from "./_components/submit-verification-modal";
 
 interface DocumentDetailPageProps {
     params: Promise<{ docId: string }>;
@@ -67,6 +68,7 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
     } = useSingleDocument(docId);
 
     const [copiedId, setCopiedId] = useState(false);
+    const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
     const [copiedJson, setCopiedJson] = useState(false);
     const [viewRawJson, setViewRawJson] = useState(false);
 
@@ -204,6 +206,21 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                             <span>{isDownloading ? "Downloading…" : "Download File"}</span>
                                         </button>
 
+                                        {/* Submit to Institution for Verification */}
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsSubmitModalOpen(true)}
+                                            className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-all shadow-sm cursor-pointer"
+                                            title="Request institutional verification seal"
+                                        >
+                                            <span>🛡️</span>
+                                            <span>
+                                                {doc.submission_status === "submitted"
+                                                    ? `Submitted (${doc.target_institution || "Institution"})`
+                                                    : "Verify via Institution"}
+                                            </span>
+                                        </button>
+
                                         {/* Share QR / Token Link */}
                                         <Link
                                             href={`/document-share?docId=${doc.id}`}
@@ -240,6 +257,41 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                 {downloadError && (
                                     <div className="mt-4 bg-amber-50 border border-amber-200 text-amber-800 text-xs px-4 py-2.5 rounded-xl">
                                         {downloadError}
+                                    </div>
+                                )}
+
+                                {doc.verification_seal && (
+                                    <div className={`mt-5 p-4 rounded-xl border flex items-start gap-3.5 ${
+                                        doc.verification_seal.is_genuine && doc.status !== "rejected"
+                                            ? "bg-emerald-50/80 border-emerald-200 text-emerald-950"
+                                            : "bg-rose-50/90 border-rose-300 text-rose-950"
+                                    }`}>
+                                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-base font-bold ${
+                                            doc.verification_seal.is_genuine && doc.status !== "rejected"
+                                                ? "bg-emerald-600 text-white shadow-xs"
+                                                : "bg-rose-600 text-white shadow-xs"
+                                        }`}>
+                                            {doc.verification_seal.is_genuine && doc.status !== "rejected" ? "✓" : "⛔"}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span className="font-extrabold text-sm">
+                                                    {doc.verification_seal.is_genuine && doc.status !== "rejected"
+                                                        ? `OFFICIALLY VERIFIED BY ${doc.verification_seal.verifier_name.toUpperCase()}`
+                                                        : "FLAGGED AS NOT GENUINE / COUNTERFEIT"}
+                                                </span>
+                                                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-white font-bold border border-current/20">
+                                                    Seal #${doc.verification_seal.seal_id}
+                                                </span>
+                                            </div>
+                                            <p className="text-xs mt-1 leading-relaxed opacity-90">
+                                                {doc.verification_seal.notes || (
+                                                    doc.verification_seal.is_genuine
+                                                        ? "This credential has been examined, confirmed authentic, and sealed."
+                                                        : "This credential was examined by the institution and flagged as fake. Permanent warning applied."
+                                                )}
+                                            </p>
+                                        </div>
                                     </div>
                                 )}
                             </div>

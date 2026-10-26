@@ -2,11 +2,15 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { authService } from "@/lib/services/auth.service";
 
 export function AuthRedirectHandler() {
     const router = useRouter();
 
     useEffect(() => {
+        // Non-blocking ping to warm up the Render free-tier backend instance
+        authService.healthCheck().catch(() => {});
+
         if (typeof window === "undefined") return;
 
         const hash = window.location.hash;

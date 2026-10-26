@@ -84,6 +84,8 @@ export default function DocumentDetails() {
                             </div>
 
                             <button
+                                type="button"
+                                suppressHydrationWarning
                                 onClick={() => refresh()}
                                 disabled={isLoading}
                                 title="Refresh documents"

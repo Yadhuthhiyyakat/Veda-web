@@ -2,6 +2,12 @@
 // Auth
 // ─────────────────────────────────────────────
 
+export interface HealthCheckResponse {
+    status: string;
+    timestamp: string;
+}
+
+
 export interface AuthUser {
     id: string;
     email: string;
@@ -12,6 +18,8 @@ export interface AuthProfile {
     username: string;
     full_name: string;
     avatar_url: string | null;
+    role?: "citizen" | "institution" | "admin";
+    institution_name?: string | null;
 }
 
 export interface LoginResponse {
@@ -63,9 +71,28 @@ export interface DeleteAccountResponse {
     message: string;
 }
 
+export interface DevicePairingTokenResponse {
+    pair_token: string;
+    expires_in: number;
+    user_id: string;
+    email: string;
+    qr_payload: string;
+}
+
 // ─────────────────────────────────────────────
 // Profile
 // ─────────────────────────────────────────────
+
+export interface VerificationSeal {
+    seal_id: string;
+    is_genuine: boolean;
+    status: string;
+    verifier_id?: string;
+    verifier_name: string;
+    institution_type?: string;
+    verified_at: string;
+    notes?: string;
+}
 
 export interface Profile {
     id: string;
@@ -73,6 +100,9 @@ export interface Profile {
     full_name: string;
     avatar_url: string | null;
     updated_at?: string;
+    role?: "citizen" | "institution" | "admin";
+    institution_name?: string | null;
+    institution_type?: string | null;
 }
 
 export interface UpdateProfilePayload {
@@ -105,6 +135,12 @@ export interface Document {
     expiry_date: string | null;
     created_at: string;
     updated_at: string;
+    file_url?: string | null;
+    document_data?: Record<string, unknown>;
+    target_institution?: string | null;
+    submission_status?: "draft" | "submitted" | "reviewed";
+    applicant_notes?: string | null;
+    verification_seal?: VerificationSeal | null;
 }
 
 export interface DocumentDecrypted extends Document {
@@ -175,6 +211,9 @@ export interface VerifyTokenResponse {
     valid: boolean;
     expires_at: string;
     document: Record<string, unknown>;
+    file_url?: string | null;
+    file_name?: string | null;
+    mime_type?: string | null;
 }
 
 // ─────────────────────────────────────────────
@@ -249,4 +288,35 @@ export interface AuditLog {
 export interface ApiError {
     error: string;
     details?: Record<string, string[]>;
+}
+
+// ─────────────────────────────────────────────
+// Institutions
+// ─────────────────────────────────────────────
+
+export interface Institution {
+    id: string;
+    name: string;
+    type: string;
+    avatar_url?: string | null;
+    verified: boolean;
+}
+
+export interface InstitutionQueueItem {
+    id: string;
+    title: string;
+    type: string;
+    category: string;
+    subcategory: string;
+    status: DocumentStatus;
+    submission_status: string;
+    target_institution: string | null;
+    applicant_notes: string | null;
+    verification_seal: VerificationSeal | null;
+    created_at: string;
+    expiry_date: string | null;
+    owner_name: string;
+    owner_avatar?: string | null;
+    document_data?: Record<string, unknown>;
+    has_file?: boolean;
 }
