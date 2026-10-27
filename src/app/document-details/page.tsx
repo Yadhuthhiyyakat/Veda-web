@@ -57,7 +57,7 @@ export default function DocumentDetails() {
                                 </span>
                             </div>
                             <p className="text-sm text-gray-500 font-medium">
-                                Manage, decrypt, and verify your AES-256 encrypted digital vault
+                                Manage, decrypt, and verify your encrypted digital vault
                             </p>
                         </div>
 

@@ -18,7 +18,11 @@ export function useDocumentShare() {
     const [isLoadingTokens, setIsLoadingTokens] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const generateShareToken = async (docId: string, sharedFields?: string[]) => {
+    const generateShareToken = async (
+        docId: string,
+        sharedFields?: string[],
+        allowedEmails?: string[]
+    ) => {
         setError(null);
         setIsGenerating(true);
         try {
@@ -26,6 +30,7 @@ export function useDocumentShare() {
                 document_id: docId,
                 expires_in_minutes: expiresInMinutes,
                 shared_fields: sharedFields && sharedFields.length > 0 ? sharedFields : undefined,
+                allowed_emails: allowedEmails && allowedEmails.length > 0 ? allowedEmails : undefined,
             });
             setGeneratedToken(token);
             await loadTokensForDocument(docId);
@@ -63,10 +68,10 @@ export function useDocumentShare() {
     };
 
     const getShareUrl = (token: string) => {
-        const base =
-            process.env.NEXT_PUBLIC_API_URL ||
-            "https://vedha-backend-9wy7.onrender.com";
-        return `${base}/api/tokens/verify/${token}`;
+        const appUrl =
+            process.env.NEXT_PUBLIC_APP_URL ||
+            "https://veda-beryl-rho.vercel.app";
+        return `${appUrl}/verify/${token}`;
     };
 
     return {

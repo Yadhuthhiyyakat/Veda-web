@@ -69,7 +69,7 @@ export function DashboardStatCards({
                 iconBg="bg-indigo-50 text-indigo-600"
                 count={totalDocuments}
                 label="Total Vault Files"
-                sublabel="AES-256 encrypted"
+                sublabel="Encrypted in vault"
                 isLoading={isLoading}
             />
             <StatCard

@@ -39,8 +39,8 @@ export const institutionService = {
     return res.data;
   },
 
-  // Switch or register account role (citizen vs institution)
-  async updateRole(role: "citizen" | "institution", institution_name?: string, institution_type?: string) {
+  // Switch or register account role (citizen, institution, or admin)
+  async updateRole(role: "citizen" | "institution" | "admin", institution_name?: string, institution_type?: string) {
     const res = await apiClient.patch("/institutions/role", {
       role,
       institution_name,

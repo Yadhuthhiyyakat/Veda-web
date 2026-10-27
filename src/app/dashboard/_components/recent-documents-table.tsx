@@ -109,7 +109,7 @@ export function RecentDocumentsTable({ documents, isLoading }: RecentDocumentsTa
                                         </div>
                                         <div className="text-sm font-bold text-slate-800">No documents in vault yet</div>
                                         <p className="text-xs text-slate-500">
-                                            Protect your credentials with AES-256-GCM encryption. Upload your first document now.
+                                            Protect your credentials with secure encryption. Upload your first document now.
                                         </p>
                                         <Link
                                             href="/document-upload"

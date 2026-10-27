@@ -20,7 +20,7 @@ import {
 import { useSingleDocument } from "./_hooks/use-single-document";
 import { EditDocumentModal } from "./_components/edit-document-modal";
 import { DeleteDocumentModal } from "./_components/delete-document-modal";
-import { SubmitVerificationModal } from "./_components/submit-verification-modal";
+
 
 interface DocumentDetailPageProps {
     params: Promise<{ docId: string }>;
@@ -68,7 +68,7 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
     } = useSingleDocument(docId);
 
     const [copiedId, setCopiedId] = useState(false);
-    const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+
     const [copiedJson, setCopiedJson] = useState(false);
     const [viewRawJson, setViewRawJson] = useState(false);
 
@@ -206,20 +206,7 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                             <span>{isDownloading ? "Downloading…" : "Download File"}</span>
                                         </button>
 
-                                        {/* Submit to Institution for Verification */}
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsSubmitModalOpen(true)}
-                                            className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-all shadow-sm cursor-pointer"
-                                            title="Request institutional verification seal"
-                                        >
-                                            <span>🛡️</span>
-                                            <span>
-                                                {doc.submission_status === "submitted"
-                                                    ? `Submitted (${doc.target_institution || "Institution"})`
-                                                    : "Verify via Institution"}
-                                            </span>
-                                        </button>
+
 
                                         {/* Share QR / Token Link */}
                                         <Link
@@ -309,7 +296,7 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                                 </div>
                                                 <div>
                                                     <h2 className="text-base font-bold text-[#1a172c]">
-                                                        Encrypted Document Data (AES-256-GCM)
+                                                        Encrypted Document Data
                                                     </h2>
                                                     <p className="text-xs text-gray-400">
                                                         Stored ciphertext payload protected by server encryption key
@@ -341,7 +328,7 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                                 ) : (
                                                     <>
                                                         <EyeIcon className="w-3.5 h-3.5" />
-                                                        <span>Decrypt Document Data (6.4)</span>
+                                                        <span>Decrypt Document Data</span>
                                                     </>
                                                 )}
                                             </button>
@@ -359,7 +346,7 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                                 <div className="flex items-center justify-between text-xs">
                                                     <div className="flex items-center gap-2">
                                                         <span className="font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
-                                                            ✓ AES-256 Plaintext Decrypted
+                                                            ✓ Plaintext Decrypted
                                                         </span>
                                                         <span className="text-gray-400">
                                                             ({Object.keys(decryptedData).length} attributes)
@@ -426,14 +413,14 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                                     Data is currently encrypted at rest
                                                 </p>
                                                 <p className="text-[11px] text-gray-400 max-w-sm mx-auto">
-                                                    Click &quot;Decrypt Document Data&quot; to securely fetch the
-                                                    AES-256-GCM decrypted plaintext JSON payload from the server.
+                                                    Click &quot;Decrypt Document Data&quot; to securely view the
+                                                    decrypted plaintext payload from the server.
                                                 </p>
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* 6.5 Binary File Information & Decryption Download */}
+                                    {/* Binary File Information & Decryption Download */}
                                     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-7">
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
@@ -441,7 +428,7 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                             </div>
                                             <div>
                                                 <h2 className="text-base font-bold text-[#1a172c]">
-                                                    Encrypted Binary File Attachment (6.5)
+                                                    Encrypted File Attachment
                                                 </h2>
                                                 <p className="text-xs text-gray-400">
                                                     Secure storage file buffer decrypted on-the-fly with mime-type streaming
@@ -457,7 +444,7 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                                 <div>
                                                     <p className="text-xs font-bold text-gray-800">{doc.title}</p>
                                                     <p className="text-[11px] text-gray-400">
-                                                        AES-256 encrypted binary stream
+                                                        Encrypted file stream
                                                     </p>
                                                 </div>
                                             </div>
@@ -554,9 +541,8 @@ export default function DocumentDetailPage({ params }: DocumentDetailPageProps) 
                                         </div>
 
                                         <p className="text-xs text-gray-300 leading-relaxed">
-                                            This document is encrypted with <strong>AES-256-GCM</strong> cipher. Decryption
-                                            keys are held in isolated HSM/KMS environments, ensuring strict data residency
-                                            and privacy compliance.
+                                            This document is end-to-end encrypted. Decryption keys are held
+                                            securely, ensuring strict data residency and privacy compliance.
                                         </p>
 
                                         <div className="pt-2">

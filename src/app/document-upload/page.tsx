@@ -5,7 +5,7 @@ import React, { Suspense } from "react";
 
 export const metadata = {
     title: "Upload & Encrypt Document - VEDA",
-    description: "Upload and securely encrypt documents with AES-256-GCM on VEDA.",
+    description: "Upload and securely encrypt documents on VEDA.",
 };
 
 export default function DocumentUploadPage() {
@@ -18,7 +18,7 @@ export default function DocumentUploadPage() {
                     <div className="mb-8">
                         <h1 className="text-2xl font-bold text-[#1a172c] mb-1">Upload & Issue Document</h1>
                         <p className="text-sm text-gray-500 font-medium">
-                            Securely upload encrypted files or create structured digital credentials with AES-256-GCM
+                            Securely upload encrypted files or create structured digital credentials
                         </p>
                     </div>
 

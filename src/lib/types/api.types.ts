@@ -198,6 +198,7 @@ export interface Token {
     token: string;
     expires_at: string;
     shared_fields: string[] | null;
+    allowed_emails?: string[] | null;
     created_at: string;
 }
 
@@ -205,6 +206,7 @@ export interface GenerateTokenPayload {
     document_id: string;
     expires_in_minutes?: number;
     shared_fields?: string[];
+    allowed_emails?: string[];
 }
 
 export interface VerifyTokenResponse {

@@ -68,7 +68,7 @@ export default function Login() {
                     {/* Security footer note */}
                     <div className="mt-6 pt-4 flex items-center justify-center gap-1.5 text-[11px] font-semibold text-slate-400">
                         <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>AES-256-GCM Session Protection</span>
+                        <span>Encrypted Session Protection</span>
                     </div>
                 </div>
             </main>

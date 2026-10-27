@@ -6,6 +6,8 @@ import DashSidebar from "@/app/components/dash-sidebar";
 import { institutionService } from "@/lib/services/institution.service";
 import type { InstitutionQueueItem, Profile } from "@/lib/types/api.types";
 import { profileService } from "@/lib/services/profile.service";
+import apiClient from "@/lib/api-client";
+import { documentService } from "@/lib/services/document.service";
 
 export default function InstitutionDashboardPage() {
     const [profile, setProfile] = useState<Profile | null>(null);
@@ -21,6 +23,63 @@ export default function InstitutionDashboardPage() {
     const [showRoleModal, setShowRoleModal] = useState(false);
     const [regInstName, setRegInstName] = useState("");
     const [regInstType, setRegInstType] = useState("university");
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [tokenInput, setTokenInput] = useState("");
+    const [isLookingUpToken, setIsLookingUpToken] = useState(false);
+
+    async function handleDownloadFile(docId: string, title?: string) {
+        setIsDownloading(true);
+        try {
+            const blob = await documentService.downloadFile(docId);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${title || "document"}.bin`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (err: any) {
+            setFeedback({ message: "Failed to download certificate file", type: "error" });
+        } finally {
+            setIsDownloading(false);
+        }
+    }
+
+    async function handleVerifyByToken() {
+        if (!tokenInput.trim()) return;
+        setIsLookingUpToken(true);
+        try {
+            const res = await apiClient.get(`/tokens/verify/${tokenInput.trim()}`);
+            const data = res.data;
+            if (data && data.valid) {
+                setSelectedDoc({
+                    id: data.document_id || "scanned-doc",
+                    title: data.document?.title || "Citizen Certificate",
+                    type: data.document?.type || "certificate",
+                    category: data.document?.category || "general",
+                    subcategory: data.document?.subcategory || "general",
+                    status: data.document?.status || "pending",
+                    submission_status: "submitted",
+                    target_institution: data.target_institution,
+                    applicant_notes: data.applicant_notes,
+                    verification_seal: data.verification_seal,
+                    created_at: data.expires_at || new Date().toISOString(),
+                    owner_name: "Citizen (Via Verification QR)",
+                    document_data: data.document || {},
+                    expiry_date: data.document?.expiry_date || null,
+                    has_file: !!data.file_url,
+                });
+                setFeedback({ message: "Document verified via QR token. Ready for institutional review.", type: "success" });
+            } else {
+                setFeedback({ message: "Token not valid or expired", type: "error" });
+            }
+        } catch (err: any) {
+            setFeedback({ message: err.response?.data?.error || "Token invalid or expired", type: "error" });
+        } finally {
+            setIsLookingUpToken(false);
+        }
+    }
 
     useEffect(() => {
         loadData();
@@ -221,6 +280,36 @@ export default function InstitutionDashboardPage() {
                                 </div>
                             </div>
 
+                            {/* QR Token Verification Quick Scan Box */}
+                            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-100/80 rounded-2xl p-5 mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                                <div>
+                                    <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                                        <span>🔍</span>
+                                        <span>Verify Citizen via QR Token</span>
+                                    </h3>
+                                    <p className="text-xs text-slate-500 mt-0.5">
+                                        Scan or paste the verification token presented by the citizen to manually inspect and seal credentials.
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2 w-full md:w-auto">
+                                    <input
+                                        type="text"
+                                        value={tokenInput}
+                                        onChange={(e) => setTokenInput(e.target.value)}
+                                        placeholder="Paste citizen's QR token..."
+                                        className="px-3.5 py-2 text-xs border border-indigo-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-mono w-full md:w-64"
+                                    />
+                                    <button
+                                        type="button"
+                                        disabled={isLookingUpToken || !tokenInput.trim()}
+                                        onClick={handleVerifyByToken}
+                                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-xs disabled:opacity-50 cursor-pointer shrink-0"
+                                    >
+                                        {isLookingUpToken ? "Inspecting..." : "Inspect QR"}
+                                    </button>
+                                </div>
+                            </div>
+
                             {/* Filter Bar */}
                             <div className="flex items-center justify-between gap-4 mb-4">
                                 <div className="flex items-center gap-2">
@@ -374,6 +463,21 @@ export default function InstitutionDashboardPage() {
                                 </div>
                             )}
                         </div>
+
+                        {/* Download Original Certificate File */}
+                        {selectedDoc.has_file && (
+                            <div className="mb-5">
+                                <button
+                                    type="button"
+                                    disabled={isDownloading}
+                                    onClick={() => handleDownloadFile(selectedDoc.id, selectedDoc.title)}
+                                    className="w-full py-2.5 px-4 bg-indigo-50 hover:bg-indigo-100 text-[#5a4fcf] text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-indigo-200 transition cursor-pointer disabled:opacity-50"
+                                >
+                                    <span>📄</span>
+                                    <span>{isDownloading ? "Downloading file..." : "Download & Inspect Original Certificate File"}</span>
+                                </button>
+                            </div>
+                        )}
 
                         {/* Decrypted Payload Preview */}
                         <div className="mb-5">

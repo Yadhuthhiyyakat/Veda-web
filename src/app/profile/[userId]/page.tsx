@@ -90,8 +90,8 @@ export default function PublicProfilePage({ params }: PublicProfilePageProps) {
                             <p className="text-sm font-semibold text-gray-700 mb-1">
                                 Resolving Public Identity
                             </p>
-                            <p className="text-xs text-gray-400 font-mono">
-                                GET /api/profiles/{userId}
+                            <p className="text-xs text-gray-400">
+                                Verifying decentralized signature…
                             </p>
                         </div>
                     ) : error ? (

@@ -153,7 +153,7 @@ export function SettingsPanel() {
                                 </div>
                                 <div>
                                     <h2 className="text-lg font-bold text-[#1a172c]">Delete Account</h2>
-                                    <p className="text-xs text-gray-400">Endpoint: DELETE /api/auth/delete</p>
+                                    <p className="text-xs text-rose-500 font-medium">This action is permanent and irreversible</p>
                                 </div>
                             </div>
                             <button

@@ -36,7 +36,7 @@ export function DashboardTopBar({
                 </div>
                 <p className="text-xs sm:text-sm text-slate-500 font-medium flex items-center gap-1.5">
                     <ShieldCheckIcon className="w-3.5 h-3.5 text-[#5a4fcf]" />
-                    <span>Your digital identity &amp; credentials are encrypted under AES-256-GCM.</span>
+                    <span>Your digital identity &amp; credentials are end-to-end encrypted.</span>
                 </p>
             </div>
 

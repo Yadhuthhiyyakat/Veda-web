@@ -80,7 +80,7 @@ export function DocumentUploadForm() {
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold text-[#1a172c] mb-1">Document Created Successfully!</h2>
                     <p className="text-sm text-gray-500">
-                        Your document data has been securely encrypted with AES-256-GCM.
+                        Your document data has been securely encrypted.
                     </p>
                 </div>
 
@@ -315,7 +315,7 @@ export function DocumentUploadForm() {
                     <div>
                         <h3 className="text-sm font-bold text-[#1a172c] uppercase tracking-wider flex items-center gap-2">
                             <ShieldIcon className="w-4 h-4 text-[#5a4fcf]" />
-                            <span>Encrypted Document Payload (AES-256-GCM)</span>
+                            <span>Encrypted Document Payload</span>
                         </h3>
                         <p className="text-xs text-gray-400 mt-0.5">
                             {mode === "digital"

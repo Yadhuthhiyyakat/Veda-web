@@ -26,7 +26,7 @@ export function ProfileInfoCard({ profile, email, isLoading, onEdit }: ProfileIn
         return (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center justify-center text-center min-h-[360px]">
                 <div className="w-10 h-10 border-3 border-[#5a4fcf] border-t-transparent rounded-full animate-spin mb-4" />
-                <p className="text-xs text-gray-400 font-medium">Loading profile from /api/profiles/me…</p>
+                <p className="text-xs text-gray-400 font-medium">Loading profile…</p>
             </div>
         );
     }
@@ -42,7 +42,7 @@ export function ProfileInfoCard({ profile, email, isLoading, onEdit }: ProfileIn
                 type="button"
                 onClick={onEdit}
                 className="absolute top-5 right-5 inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-xl border border-gray-200 transition-colors cursor-pointer"
-                title="Update My Profile (PATCH /api/profiles/me)"
+                title="Update Profile Information"
             >
                 <EditIcon className="w-3.5 h-3.5 text-gray-500" />
                 Edit Profile
@@ -152,7 +152,7 @@ export function ProfileEditCard({
                 <div>
                     <h2 className="text-lg font-bold text-[#1a172c]">Edit Profile</h2>
                     <p className="text-xs text-gray-400">
-                        Updates your account details via PATCH /api/profiles/me
+                        Update your account information and preferences
                     </p>
                 </div>
                 <button
@@ -372,7 +372,7 @@ export function PublicProfileExplorerCard({
                 <div>
                     <h2 className="text-lg font-bold text-[#1a172c]">Public Profile Explorer</h2>
                     <p className="text-xs text-gray-400 font-medium">
-                        Test 5.3 endpoint: <span className="font-mono text-gray-600">GET /api/profiles/:userId</span>
+                        Search and verify any public decentralized profile on the Veda network
                     </p>
                 </div>
                 {currentUserId && (
@@ -383,7 +383,7 @@ export function PublicProfileExplorerCard({
                         title="Search using your current user ID"
                     >
                         <CopyIcon className="w-3 h-3" />
-                        Test with My ID
+                        Use My ID
                     </button>
                 )}
             </div>

@@ -92,6 +92,24 @@ export default function DashSidebar({ page }: { page: string }) {
                     </div>
                 )}
 
+                {profile?.role === "admin" && (
+                    <div>
+                        <div className="px-3 mb-2 text-[10px] uppercase font-bold tracking-wider text-amber-600 flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
+                            <span>System Administration</span>
+                        </div>
+                        <div className="space-y-1">
+                            <SidebarItem
+                                href="/admin/dashboard"
+                                icon={<ShieldCheckIcon className="w-4 h-4 text-amber-600" />}
+                                label="Admin Console"
+                                active={page === "admin"}
+                                onClick={close}
+                            />
+                        </div>
+                    </div>
+                )}
+
                 <div>
                     <div className="px-3 mb-2 text-[10px] uppercase font-bold tracking-wider text-slate-400">
                         Activity &amp; Management
@@ -134,7 +152,7 @@ export default function DashSidebar({ page }: { page: string }) {
                         </div>
                         <div className="flex items-center gap-1 text-[10px] text-emerald-600 font-semibold">
                             <ShieldCheckIcon className="w-3 h-3" />
-                            <span>AES-256 Protected</span>
+                            <span>End-to-End Encrypted</span>
                         </div>
                     </div>
                 </div>

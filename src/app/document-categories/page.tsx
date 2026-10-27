@@ -53,7 +53,7 @@ export default function DocumentCategoriesPage() {
                                         Document Categories
                                     </h1>
                                     <p className="text-sm text-gray-500 font-medium">
-                                        Taxonomy & classification schema for AES-256 encrypted documents
+                                        Taxonomy & classification schema for encrypted credentials
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-3 flex-1 md:flex-initial justify-end">

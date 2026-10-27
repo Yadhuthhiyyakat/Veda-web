@@ -51,7 +51,7 @@ export function HeroSection() {
 
                 {/* Subtitle */}
                 <p className="text-slate-600 mb-10 text-lg sm:text-xl max-w-2xl leading-relaxed font-normal">
-                    Store, encrypt, and share sensitive credentials with end-to-end AES-256 protection.
+                    Store, encrypt, and share sensitive credentials with end-to-end protection.
                     Verify authenticity instantly via time-limited QR codes and zero-knowledge proofs.
                 </p>
 
@@ -73,7 +73,7 @@ export function HeroSection() {
                 {/* Trust Badges */}
                 <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-semibold text-slate-500 mb-20">
                     <span className="flex items-center gap-1.5">
-                        <CheckIcon className="w-4 h-4 text-emerald-600" /> AES-256-GCM Encryption
+                        <CheckIcon className="w-4 h-4 text-emerald-600" /> End-to-End Encryption
                     </span>
                     <span className="w-1 h-1 rounded-full bg-slate-300 hidden sm:block" />
                     <span className="flex items-center gap-1.5">
@@ -112,8 +112,8 @@ export function HeroSection() {
 
                             <div className="grid grid-cols-2 gap-3 pt-2">
                                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                                    <div className="text-[11px] font-semibold text-slate-400">Cipher Protocol</div>
-                                    <div className="text-sm font-bold text-slate-800">AES-256-GCM / SHA-256</div>
+                                    <div className="text-[11px] font-semibold text-slate-400">Security Architecture</div>
+                                    <div className="text-sm font-bold text-slate-800">End-to-End Encrypted</div>
                                 </div>
                                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
                                     <div className="text-[11px] font-semibold text-slate-400">Share Expiration</div>
@@ -160,7 +160,7 @@ export function HeroSection() {
                         <FeatureCard
                             icon={<LockIcon className="w-6 h-6 text-[#5a4fcf]" />}
                             title="Zero-Knowledge Encryption"
-                            description="All files are encrypted client-side using AES-256 before ever touching the network."
+                            description="All files are encrypted client-side before ever touching the network."
                         />
                         <FeatureCard
                             icon={<QrCodeIcon className="w-6 h-6 text-emerald-600" />}
@@ -244,8 +244,8 @@ export function HeroSection() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                             <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10">
-                                <div className="text-2xl font-black text-indigo-300">256-bit</div>
-                                <div className="text-xs text-slate-300 mt-1">GCM Authenticated Encryption</div>
+                                <div className="text-2xl font-black text-indigo-300">Zero-Trust</div>
+                                <div className="text-xs text-slate-300 mt-1">End-to-End Vault Security</div>
                             </div>
                             <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10">
                                 <div className="text-2xl font-black text-emerald-400">0 ms</div>
@@ -283,7 +283,7 @@ export function HeroSection() {
                             isOpen={faqOpen === 1}
                             onClick={() => toggleFaq(1)}
                             question="Can VEDA administrators view or read my uploaded documents?"
-                            answer="No. All documents undergo client-side encryption using AES-256-GCM. The encryption keys remain on your device or in your paired biometric wallet. VEDA servers only store the encrypted ciphertext and cryptographic hash."
+                            answer="No. All documents undergo client-side encryption. The encryption keys remain on your device or in your paired biometric wallet. VEDA servers only store the encrypted ciphertext and cryptographic hash."
                         />
                         <FaqItem
                             index={2}
